@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+<!--Filename: seeit.html
+	Author: Johannes Pikel
+	Date: 2016.11.07
+	ONID: pikelj
+	email: pikelj@oregonstate.edu
+	Class: CS290-400
+	Assignment: How-to-guide
+	Description: This is the signup to the NASA APi page
+	Due Date: 2016.11.16
+-->
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="style.css" type="text/css">
+		<title>NASA Open API Tutorial</title>
+	</head>
+	<body>
+		<h1 id="heading">
+			<a href="https://api.nasa.gov/index.html">
+			<img id="logo" src="imgs/logo.png" alt="Nasa Logo"></img></a>
+			Welcome to the NASA Open API<br>APOD in Action</br>
+		</h1>
+	
+			<div class="subheading">
+			<h2>Section 3: Astronomy Picture of the Day</h2>
+				<hr></hr>
+			<p>Remember to format the date in the input text box as YYYY-MM-DD</p>
+			<p>As a test 2016-11-05 contains a video, where as 2016-11-06 does not</p>
+			<div class="codeContainer">
+			<iframe width="100%" height="500" src="https://jsfiddle.net/pikelj/gc5v268y/5/embedded/js,html,css,result/dark/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+			</div>
+			
+			<p>The example above shows one way to complete the activity using the call 
+			to our proxy server and it handles the direct call to NASA API.
+			This will allow us to keep our API key somewhat more secure from browsers.</p>
+			
+			<p>To make it a bit more interactive the <code>var textBox</code> was added 
+			to allow a user to enter in a manual date.  It still needs to
+			be in the format YYYY-MM-DD.  Then inside the getData function we use an IF 
+			statement to see if anything was entered in the text box.  IF
+			so we update the <code>var textBox</code> to the string "?date= + entry in 
+			textBox".  The ? let's the server in this case ours know that
+			there is a query coming immediately after the ?.  It needs to be in the 
+			format key=value and specifically in this case for APOD as date=YYYY-MM-DD.
+			
+			<p>All that is left is to simply append the <code>var textBox</code> to our 
+			url in the line <code>req.open</code></p>
+			
+			<p>Updating the elements is very similar in nature.  Simply get the element 
+			from the html page by Id and update it's textContent with the 
+			appropriate value from the JS object.</p>
+			
+			<p>Trivial to this tutorial to make the page a bit more interactive each time 
+			the "Get Data" button is pressed, a helper function called
+			resetData is run, that removes text from the html tags, the src from the img 
+			tag and if it exists removes the iframe for displaying the videos.</p>
+		<hr></hr>
+		<h4>Direct Call to APOD</h4>
+		
+			<p>In order to show that a direct call to the NASA API is not much different, 
+			please take a look at the Fiddle below.
+			The there are now two differences from the previous Fiddle.  
+			Can you spot them?</p>
+			
+			<p>First we need to change the url in the <code>req.open</code> to be the 
+			NASA API url at https://api.nasa.gov/planetary/apod. 
+			Then we also need to modify our textBox some so that it will appropriately 
+			submit our query as well as the api key, DEMO_KEY.
+			The structure of our complete URL in this GET should look like 
+			<code>https://api.nasa.gov/planetary/apod?date=YYYY-MM-DD&api_key=DEMO_KEY</code>
+			We already discussed the ? in the url, now the ampersand & is a way to
+			demarcate the different key=value pairs.  
+			In this case api_key=DEMO_KEY is another pair and the NASA APOD API will use it 
+			for authentication.</p>
+			<p>It is very likely that the limit has been exceed for the DEMO_KEY,  
+			and if so you should see an error message in the Results, 
+			in this Fiddle.  This is one reason it is a good idea to get your own API key.
+			Error messages are arbitrarily placed into the 'explanation' and 'date' span, 
+			in the final else statement.</p>
+			
+	
+	
+	
+			<div class="codeContainer">
+			<iframe width="100%" height="600" src="https://jsfiddle.net/pikelj/6yn39aqv/2/embedded/js,html,css,result/dark/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+			</div>
+	
+			<hr></hr>
+		<h4>Next we'll explore the Mars Rover API!</h4>
+			<p>Great now that we've explored a very simple API that doesn't have much 
+			in the way of required queries let's take a look at something will involve
+			a bit more work</p>
+		
+		</div>
+		<div class="navbuttons">
+		<a class="navtext" href="signup.html"><span class="navigation">Back</span></a>
+		<a class="navtext" href="mars.html"><span class="navigation">Mars Rover</span></a>
+		</div>
+		
+		<script src="menu.js"></script>
+	</body>
+</html>

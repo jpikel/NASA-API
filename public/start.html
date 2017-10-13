@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<!--Filename: start.html
+	Author: Johannes Pikel
+	Date: 2016.11.07
+	ONID: pikelj
+	email: pikelj@oregonstate.edu
+	Class: CS290-400
+	Assignment: How-to-guide
+	Description: This is the introduction to the NASA APi page
+	Due Date: 2016.11.16
+-->
+
+<html>
+  <head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="style.css" type="text/css">
+		<title>NASA Open API Tutorial</title>
+  </head>
+  <body>
+	<h1 id="heading">
+		<a class="newtab" href="https://api.nasa.gov/index.html">
+		<img id="logo" src="imgs/logo.png" alt="Nasa Logo"></img></a>
+		Welcome to the NASA Open API<br>Introduction</br>
+	</h1>
+	
+	<div class="subheading">
+		<h2>Section 1: Getting Started</h2>
+		<hr></hr>
+		<h4>What is an API?</h4>
+		
+			<p><em>API</em> stands for <em>Application Programming Interface</em>
+			and it is a set of tools, functions and provides excellent basic building 
+			blocks to build from. This allows a developer to have access to this "library"
+			of resources without needing to know the mechanics behind everything.  In this
+			way we can readily build up a program, application or parts quickly to make
+			something of our own.
+			</p>
+			
+			<p>In this case we'll be accessing some of the great information and data
+			that NASA has avaiable on their API.
+			</p>
+			<p>For further reading about APIs check out these pages:</p>
+			<p>
+				<a class="newtab" href="https://en.wikipedia.org/wiki/Application_programming_interface">Wikipedia Article</a>
+			<br>
+				<a class="newtab" href="http://stackoverflow.com/questions/7440379/what-exactly-is-the-meaning-of-an-api">Stackoverflow Article</a>
+			</br>
+			</p>
+			
+			<p>Think of an API like lego blocks.  Each block has certain properties, such
+			as size, shape, color.	In our case though each block could be seen as a call 
+			to the API for a certain set of data, through a query. Some blocks may 
+			only connect to other blocks in a specific order or	as in our case if the 
+			correct information is received.  Then when you have all the
+			correct building blocks you can build something awesome like this!</p>
+			
+			<img src="imgs/lego2.png" alt="Lego Death Star"></img>
+	
+		
+		<hr></hr>
+		<h4>What is JSON?</h4>
+			<p>JSON, pronounced <rt>" jay-s&#601n"</rt>, or JavaScript Object Notation 
+			is an open standard	format that is used to transmit data objects in such a 
+			way that it is easily read and written by us, humans. Now JSON is could be
+			considered one of the most common methods to transmit data to and from an API.
+			</p>
+			<p>For an excellent description of JSON perform a 
+			<a class="newtab" href="https://en.wikipedia.org/wiki/Hohmann_transfer_orbit">Hohmann Transfer</a> to 
+			<a class="newtab" href="http://www.json.org/"> json.org</a>.
+
+
+		<h4>Example</h4>
+			<div class="fiddle">
+				<iframe width="100%" height="500" src="https://jsfiddle.net/pikelj/3fhhcfLu/embedded/js,html,css,result/dark/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+			</div>
+			
+			<p>In the example we create two new javascript objects, the first is 
+			in JSON notation and the second in standard javascript notation.  
+			In javascript accessing elements is very forgiving.</p>
+			
+			<p>We can use dot notation as in <code>JSONobj.foo</code> or with brackets 
+			and a string as in <code>JSONobj["key"]</code>.</p>
+			
+			<p>The <em>critical</em> thing to remember in all of this is that a JSON 
+			object's keys must be <em>enclosed in double quotes</em> "". Whereas a 
+			javascript object does not have this requirement.</p>
+			
+			<p>The other important thing to remember is that the value side of JSON 
+			notation may <em>only contain</em>
+			a string, number, object, array, or bool.  Whereas a javascript object 
+			may contain a function.</p>
+			
+		<h4>JSON Stringify</h4>
+			<p>Luckily JSON gives us a great tool to convert any javascript object 
+			to the JSON format with the use	of the <code>stringify()</code> method.</p>
+			
+			<div class="fiddle">
+				<iframe width="100%" height="500" src="https://jsfiddle.net/pikelj/byj6vvkm/4/embedded/js,html,css,result/dark/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+			</div>
+			<p>In this example we only have a single object in javascript notation,
+			first we just try to output the javascript object to an 
+			html element.  Resulting as expected the output stating it is an 
+			[object Object].</p>
+			<p>Then we see that after calling <code>JSON.stringify()</code> on our object 
+			we can now output the entire object as a long string to the element "stringy".
+			</p>
+			<p>The NASA API will return JSON notation objects so we'll need to call
+			<code>JSON.parse()</code> on them in order to
+			access the data contained inside. As shown in the example once we parse 
+			the stringified object, we are able to once again access the elements inside.
+			Using dot notation or brackets and a string.</p>
+			
+	</div>
+	<div class="navbuttons">
+	<a class="navtext" href="index.html"><span class="navigation">Back</span></a>
+	<a class="navtext" href="signup.html"><span class="navigation">Sign Up</span></a>
+	</div>
+	
+		
+	<script src="menu.js"></script>
+  </body>
+</html>

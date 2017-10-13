@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+
+<!--Filename: mars2.html
+	Author: Johannes Pikel
+	Date: 2016.11.07
+	ONID: pikelj
+	email: pikelj@oregonstate.edu
+	Class: CS290-400
+	Assignment: How-to-guide
+	Description: This is the signup to the NASA APi page
+	Due Date: 2016.11.16
+-->
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="style.css" type="text/css">
+		<title>NASA Open API Tutorial</title>
+	</head>
+	<body>
+		<h1 id="heading">
+			<a href="https://api.nasa.gov/index.html">
+			<img id="logo" src="imgs/logo.png" alt="Nasa Logo"></img></a>
+			Welcome to the NASA Open API<br>Mars Pictures Rover API</br>
+		</h1>
+	
+			<div class="subheading">
+		<h2>Section 5: Mars Rover Photos</h2>
+		<hr></hr>
+			<p>We're almost done!  Now we have a method to get some data about our rover.  
+			But remember there is another GET request for this particular API.  
+			Building on our previous example we'll make a simple call to this new page at 
+			<code>https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=1000&api_key=DEMO_KEY</code>
+			 Notice that we need to actually be in a directory for the rover name, so 
+			 we'll actually truncate this 
+			 url a bit to <code>https://api.nasa.gov/mars-photos/api/v1/rovers/</code> 
+			 and from there we can add
+			 all of the pieces we need to get to the pictures we want.</p>
+			 
+			 <p>So we'll need to add in the rover's name as the directory, then 
+			 <code>/photos?</code><br>
+			 and finally our queries such as 
+			 <code>sol=number&camera=abbreviation&api_key=DEMO_KEY</code>
+			 
+			 <hr></hr>
+		<h4>Example</h4>
+			 <p>So in order for this work we'll make another <code>app.get()</code> 
+			 in our <em>interface.js</em> file. It 
+			 should look very similar to the others in that all it is doing to passing 
+			 along information to NASA
+			 and then sending only the responseText back to us the client or in this case 
+			 our Fiddle. The app.get() we want to add is:</p>
+
+			<pre class="codeContainer">
+			
+
+116 //This function will serve as the pass through to get a request from
+117 //NASA Mars Rover API within a specific directory
+118 //To keep most of the work in our fiddle it will expect a few queries
+119 //dir=directory/photos
+120 //sol=solday
+121 //camera=camera chosen
+122 //The only thing this app.get() will do is append the api_key
+123 app.get('/roverpics', function(req, res){
+124     var url = "https://api.nasa.gov/mars-photos/api/v1/rovers/";
+125
+126     res.setHeader('Access-Control-Allow-Origin', '*');
+127
+128     if(Object.keys(req.query).length != 0){
+129         url += req.query["dir"]
+130         url += "?sol=" + req.query["sol"]
+131         url += "&camera=" + req.query["camera"]+ "&" + apiKey;
+132         var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+133         var req = new XMLHttpRequest();
+134
+135         //open our request asynchronously
+136         req.open("GET", url, true);
+137
+138         //we add an eventListener to wait until data returned
+139         req.addEventListener('load', function(){
+140             if(req.status >=200 && req.status < 400){
+141                 res.send(req.responseText);
+142             } else {
+143                 res.status(400);
+144                 res.send(req.responseText);
+145                 
+146             }
+147         });
+148         req.send(null);
+149     }
+150     else {
+151         res.send("No queries submitted cannot submit to NASA API");
+152     }
+153
+154 });
+
+
+
+			</pre>
+			
+			<p>When we make a GET request to our server/roverpics it will expect the 
+			following query 
+			<br>
+			<code>?dir=curiosity/photos&sol=0&camera=mast</code>, this is an example
+			where we chose Curiosity, Sol=0, and we want Camera=MAST. Again, remember 
+			the server will handle adding <code>&api_key=[api_key]</code></p>
+			
+			<p>Then it will take the queries we sent and put together the URL with 
+			queries for the Mars-Rover API, in the format described above.</p>
+			
+			<p><em>Errors:</em> sometimes the database can not find the pictures we 
+			desire, so in that case we'll set our
+			<code>res.status(400)</code> arbitrarily because we want to pass along 
+			the error from the NASA API to our client, that something went wrong.
+			Also the error message is contained in the <code>req.responseText</code> 
+			so we still want to send that back as well.</p>
+			
+			<p>With that taken care of let's Fiddle</p>
+		<hr></hr>
+		<h4>Fiddle Example</h4>
+			<div class="fiddle">
+				<iframe width="100%" height="500" src="https://jsfiddle.net/pikelj/jnLnw7eo/19/embedded/js,html,css,result/dark/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+			</div>
+			
+			<p>For this fiddle we want to specific study the <code>getPictures()</code> 
+			function.  First you can see the payload
+			to be explicitly put together as 
+			<code>?dir=<rover name>/photos&sol=<sol value>&camera=<camera></code>  
+			So our server
+			app will parse this information and put it together into the correct 
+			format to be send to the NASA API.</p>
+			
+			<p>Then we open a new request to our newly created <em>app.get()</em> on 
+			our interface.js server.  When we received the
+			response it will have a structure similar to the below.  Our fiddle 
+			will use the photos object to display each of the
+			key value pairs.  The photos object is described in more detail below.</p>
+			
+			<pre class="codeContainer">
+{"photos":[{"id":5105,
+	    "sol":756,
+	    "camera":{
+	      "id":20,
+	      "name":"FHAZ",
+	      "rover_id":5,
+	      "full_name":"Front Hazard Avoidance Camera"},
+	    "img_src":"http://mars.jpl.nasa.gov/msl-raw-images/proj/msl...JPG",
+	    "earth_date":"2014-09-21",
+	    "rover":{"id":5,
+		     "name":"Curiosity",
+		     "landing_date":"2012-08-06",
+		     "launch_date":"2011-11-26",
+		     "status":"active",
+		     "max_sol":1514,
+		     "max_date":"2016-11-08",
+		     "total_photos":287598,
+		     "cameras":[
+			{"name":"FHAZ","full_name":"Front Hazard Avoidance Camera"},
+			{"name":"NAVCAM","full_name":"Navigation Camera"},
+			{"name":"MAST","full_name":"Mast Camera"},
+			{"name":"CHEMCAM","full_name":"Chemistry and Camera Complex"},
+			{"name":"MAHLI","full_name":"Mars Hand Lens Imager"},
+			{"name":"MARDI","full_name":"Mars Descent Imager"},
+			{"name":"RHAZ","full_name":"Rear Hazard Avoidance Camera"}]}}]}
+				</pre>
+			
+			<p>The Photos object returned is an array of these objects, 
+			but they are all filtered so we only get back the camera we selected 
+			for that day.
+			Each Photo contains a Rover object with the same information about the 
+			Rover as we have already queried from the Manifest.
+			But we are mainly interested in the <code>img_src</code> and the very first 
+			<code>id</code> which is the id of the photo.</p>
+						
+			<p>Thus in our function <code>getPictures()</code>we do need to dig a bit to 
+			get the some of the additional
+			information.  The first for loop iterates the length of the <em>photos</em> 
+			object. Then for each key in the 
+			<em>photos[index]</em> we want to get those properties.  <em>Camera</em> 
+			is another object so we'll again 
+			iterate through the camera object. Finally each key:value pair is added to 
+			a new <code>&#60p&#62</code> and
+			added to the <code>&#60div&#62</code>. Lastly we're not so much interested 
+			in the <em>rover</em> object so we'll 
+			just leave that for the time being, meaning that when it is added as text content
+			it will show up as an [object]. </p>
+			<p>Also one additional cleanup function has been added that simply gets rid of
+			the div if we chose a different sol day or rover. 
+			Hopefully, things won't get messy.</p>
+			
+			<p>So then for our next fiddle we'll iterate through each of these array 
+			objects in the photos object and add the pictures to our html 
+			body along with their id, so we can reference back to them if necessary.</p>
+
+		<hr></hr>
+		<h4>Finally some eye candy of Mars</h4>
+		<div class="fiddle">
+			<iframe width="110%" height="500" src="https://jsfiddle.net/pikelj/jnLnw7eo/20/embedded/js,html,css,result/dark/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+		</div>
+		
+		<p>So in this fiddle we are using the same function <code>getPictures()</code> 
+		except now we only iterate through the 
+		<em>Photos</em> object and specifically get the <em>"img_src"</em> and <em>"id"</em>
+		and add these to a new img tag and span tag in the same &#60div&#62 as before.</p>
+		
+		<p>Of course with some good creativity and design you can easily use these 
+		components to build a nice website that will allow users
+		to browse the surface of Mars from the comfort of their living room.</p>
+		
+		<p>I hope that you have enjoyed this tutorial.  The final link below will let 
+		you see the Astronomy Picture of the Day in 
+		full HD!  The universe certainly is a beautful place!</p>
+			
+		</div>
+		<div class="navbuttons">
+		<a class="navtext" href="mars.html"><span class="navigation">Back</span></a>
+		<a class="navtext" href="final.html"><span class="navigation">A final look</span></a>
+		</div>
+		
+		<script src="menu.js"></script>
+	</body>
+</html>

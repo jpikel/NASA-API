@@ -1,0 +1,166 @@
+/*	Filename: style.css
+	Author: Johannes Pikel
+	Date: 2016.11.07
+	ONID: pikelj
+	email: pikelj@oregonstate.edu
+	Class: CS290-400
+	Assignment: Used in the NASA Open API
+	Due Date: 2016.11.16
+*/
+
+	body{
+		background-color:#393939;
+		font-family: Segoe UI, Arial, sans-serif;
+	}
+
+	#heading{
+		text-align: center;
+		line-height: 80px;
+		font-size:40px;
+		background-color: lightblue;
+		border-radius: 10px;
+		height: 182px;
+		margin-bottom:100px;
+		max-width: 900px;
+		margin-left:auto;
+		margin-right:auto;
+	}
+	
+	#logo{
+		float: left;
+		margin-left:20px;
+		/*margin-right:-120px;*/
+	}
+	
+	.subheading{
+		border-radius:10px;
+		background-color:lightblue;
+		font-size:large;
+		max-width:900px;
+		margin-left:auto;
+		margin-right:auto;
+		margin-bottom:10px;
+		padding:15px;
+		text-align:left;
+		-moz-text-align-last:center;
+		text-align-last: center;
+	}
+
+	p{
+		text-align:left;
+		-moz-text-align-last:left;
+		text-align-last:left;
+	}
+
+	#apod{
+		border-radius:10px;
+		background-color:lightblue;
+		font-size:x-large;
+		max-width:1280px;*/
+		margin-top:200px;
+		margin-left:auto;
+		margin-right:auto;
+		padding:15px;
+		text-align:justify;
+		-moz-text-align-last:center;
+		text-align-last: center;
+	}
+	#finalApod{
+		max-width:100%;
+	}
+	.navbuttons{
+		text-align:center;
+	}
+	
+	span.navigation{
+		display: inline-block;
+		margin-top:25px;
+		margin-left:auto;
+		margin-right:auto;
+		background-color:lightblue;
+		width:200px;
+		text-align:center;
+		line-height:30px;
+		font-size: large;
+		font-weight:bold;
+		border-radius:10px;
+	}
+	
+	span.navigation:hover{
+		background-color:grey;
+	}
+	
+	span.navigation:active{
+		color:white;
+		background-color:#393939;
+	}
+	
+	.navtext{
+		color:black;
+		text-decoration:none;
+	}
+	
+	
+	#menu{
+		border: 0;
+		color: lightgrey;
+		background: transparent;
+		font-size: 20px;
+		font-weight: bold;
+		padding-top: 5px;
+		width: 250px;
+	}
+	
+	select option{
+		background-color:#393939;
+	}
+	
+	.fiddle{
+		position: relative;
+		margin-left: auto;
+		margin-right: auto;
+		max-width:75%;
+		height: 500px;
+	}
+	
+	em{
+		font-weight:bold;
+	}
+	
+	code {
+		background-color: #ffffcc;
+		border-radius:2px;
+		box-shadow:2px 2px 2px #888888;
+	}
+	
+	pre.codeContainer{
+		font-family: courier new, monospace;
+		font-size:15px;
+		background-color:lemonchiffon;
+		margin-left:auto;
+		margin-right:auto;
+		width: 85%;
+		border:1px solid black;
+		text-align:left;
+		-moz-text-align-last:left;
+		text-align-last: left;
+		overflow:auto;
+	}
+	
+	#apod{
+		width: 95%;
+	}
+	
+	#roverinfo{
+		border:1px solid black;
+		border-collapse:collapse;
+		margin-left:auto;
+		margin-right:auto;
+		text-align:left;
+		-moz-text-align-last:left;
+		text-align-last: left;
+	}
+	#roverinfo td{
+		border: 1px solid black;
+		padding:5px;
+	}

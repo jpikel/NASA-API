@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<!--Filename: mars.html
+	Author: Johannes Pikel
+	Date: 2016.11.07
+	ONID: pikelj
+	email: pikelj@oregonstate.edu
+	Class: CS290-400
+	Assignment: How-to-guide
+	Description: This is the signup to the NASA APi page
+	Due Date: 2016.11.16
+-->
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="style.css" type="text/css">
+		<title>NASA Open API Tutorial</title>
+	</head>
+	<body>
+		<h1 id="heading">
+			<a href="https://api.nasa.gov/index.html">
+			<img id="logo" src="imgs/logo.png" alt="Nasa Logo"></img></a>
+			Welcome to the NASA Open API<br>Mars Rover API</br>
+		</h1>
+	
+			<div class="subheading">
+		<h2>Section 4: Mars Rover Photos</h2>
+			<p>This API is very fascinating.  It gives us access to the images collected by 
+			the	three Mars Rovers: Curiosity, Opportunity, and Spirit.  The photos are 
+			all stored in a database and there are a number of queries we may pass to 
+			this API.  We can query by date	specifically by n-th Sol which is a Martian 
+			day as related to the rover.  So the 0th Sol day is the
+			day that the rover landed. The API also allows queries by  earth day.  
+			Lastly we can filter our search
+			by the cameras avaiable and there are a number of cameras avaiable on each Rover
+			.</p>
+			
+			<p>For a detailed look at the cameras available, their abbreviations 
+			and some information about
+			this API please head over to the API's 
+			<a class="newtab" href="https://api.nasa.gov/api.html#MarsPhotos"><em>page</em></a>.</p>
+			
+			<p>That is a lot of information for a casual user to know about the Rovers.  
+			So the API also has another feature called the Mission Manifest, this 
+			GET call will return to us some detailed information about a particular Rover.
+			</p>
+			
+			<p>So we are going to start by getting the information about each of the rovers.
+			Remember their names were: Curiosity, Opporunity, and Spirit.</p>
+			
+			<p>As an aside, the DEMO_KEY is very limited in the number of requests we're 
+			allowed to use and while developing I quickly
+			ran against the limit.  Thus the use of a registered API key is very benefical.
+			So we'll update our <em>interface.js</em> with another app.get as follows</p>
+			
+			<pre class="codeContainer">
+ 80 //This function handles gets to the /manifests page
+ 81 //This will request the mission manifest from NASA Mars-Rovers API
+ 82 //If the query from the client is blank then we'll default to Curiosity
+ 83 //If a wrong query is submitted we'll notify the client
+ 84 //Query should be submitted as name=rover
+ 85 app.get('/manifests', function(req,res){
+ 86     var url = "https://api.nasa.gov/mars-photos/api/v1/manifests/";
+ 87
+ 88     if(Object.keys(req.query).length != 0){
+ 89         url += req.query["name"];
+ 90     } else {
+ 91         url += "curiosity";
+ 92     }
+ 93
+ 94     url += "?"  + apiKey;
+ 95     //used for the GET request
+ 96     var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+ 97     var req = new XMLHttpRequest();
+ 98
+ 99     //open our request asynchronously
+100     req.open("GET", url, true);
+101     req.setHeader('Access-Control-Allow-Origin', '*');
+
+102     //we add an eventListener to wait until data returned
+103     req.addEventListener('load', function(){
+104         if(req.status >=200 && req.status < 400){
+105 //          console.log(req);
+107             res.send(req.responseText);
+108         } else {
+110             res.send("Server error or incorrect query");
+111         }
+112     });
+113     req.send(null);
+114 });
+
+		</pre>
+			
+		<h4>Example Fiddle</h4>
+			<p>In this fiddle we are making a request to our proxy server. The server 
+			interface expects a query of name=rover so we'll add a text box to get 
+			some input from the
+			client and then using a small function we'll output the response we get 
+			back from our server.
+			Note our proxy server is only acting as a pass through. In the fiddle
+			there are a few lines of code that will display the reposne to the results page 
+			of the fiddle, instead of the console.</p>
+			
+			<p><code> console = {log:function(text){$("#console-log").append($(consoleLine).html(text));}};</code>
+			Handles our output so that instead of sending the output to the browser's 
+			console we're actually appending it to the div with id="console-log" in 
+			the html body</p>
+			
+			<p>You may enter Curiosity, Spirit, or Opportunity into the text box.  
+			If you leave it blank the proxy server will default to curiosity.</p>
+		
+			<div class="fiddle">
+			<iframe width="100%" height="500" src="https://jsfiddle.net/pikelj/r5os4a48/4/embedded/js,html,css,result/dark/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+			</div>
+			
+		<h3>WOW</h3>
+			<p>That is a ton of data to parse!</p>
+			<p>So then we have a ton of information here, but how are we going to use it?</p>
+			<p>We see that inside of <code>responseText</code> there is one main object n
+			amely <code>photo_manifest</code>.  
+			The basic information inside of <code>photo_manifest</code>
+			is a series of key value pairs<br>
+			<table id="roverinfo">
+				<caption>Basic Rover information</caption>
+				<tr><td>name:</td><td> name of the rover we asked for</td>
+				<tr><td>landing_date:</td><td> the Earth date the rover landed in YYYY-MM-DD
+				</td></tr>
+				<tr><td>launch_date:</td><td> the Earth date the rover launched</td></tr>
+				<tr><td>status:</td><td> whether the mission is still active or complete</td>
+				</tr>
+				<tr><td>max_sol:</td><td> how many martian days the rover has been on Mars
+				</td></tr>
+				<tr><td>max_date:</td><td> the last date in the database that we can asked 
+				for in Earth days</td></tr>
+				<tr><td>total_photos:</td><td> how many photos from all cameras are stored
+				</td></tr>
+				<tr><td>photos object:</td><td> let's look at this in detail</td></tr>
+			</table>
+			
+			<p>
+			<table id="roverinfo">
+				<caption>Photos Object</caption>
+				<tr><td colspan="2">The basic structure of an element in photos is</td></tr>
+				<tr><td colspan="2">{\"sol\":1,\"total_photos\":16,\"cameras\":[\"MAHLI\",\"MAST\",\"NAVCAM\"]},</td></tr>
+				<tr><td>sol:</td><td>The Sol day</td></tr>
+				<tr><td>total_photos</td><td>Photos taken on that day</td></tr>
+				<tr><td>cameras</td><td>Yet another object containing an array of the cameras used</td></tr>
+			</table>
+			</p>
+		
+			<p>The photos object is a very long array of key=value pairs and the camera 
+			object.  So, we'll want to handle this response in stages such that we don't need
+			to immediately display all the contents of the photos object.</p>
+
+			<p>This is all very excellent information, but still what can we do with this.  
+			Let's set off now to make an interactive experience that let's a user select 
+			a Rover, select a date in relation to that rover's max sol date.  Then the 
+			user will be notified of how many photos were stored on that day and what 
+			cameras were used.</p>
+			
+			<p>Then the user is allowed to chose one of the avaiable cameras. 
+			Once the camera is chosen for that particular Sol day and Rover, 
+			we'll then query the Mars-Rover API to retrieve the list of 
+			photos avaiable, for the rover, sol day and camera chosen by the client.</p>
+			
+			<div class="fiddle">
+			<iframe width="100%" height="500" src="https://jsfiddle.net/pikelj/hvf82k42/31/embedded/js,html,css,result/dark/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+			</div>
+			
+			<p>That's a lot of code! But let's break it apart.</p>
+			<p><code>getData()</code> does what we expect, it sends
+			a request to our server based on the Rover we chose in the dropdown menu.  
+			It defaults to Curiosity.
+			<p>
+			When the req is received, we assign the  
+			<code>JSON.parse(req.responseText)</code> to <code>var response</code>
+			This way we now	have a JS object instead of a string, that will allow us
+			access to the elements.  We want access to the
+			photo_manifest so we assign the photo_manifest key to another <code> var
+			photo_manifest</code>, this way we may pass this object to our next function.</p>
+			<p>We'll separately store the 
+			<code>photos</code> object inside of photos_manifest
+			in local storage on the browser so that
+			we may access that information at a later date.</p>
+			<p>Next we need to print only the top-level Rover Data, so it
+			makes a call to printData()</p>
+			
+			<p><code>printData()</code> generates a new table and adds it to the html body.  
+			For each key in the photo_manifest it creates a new row and cell and then adds 
+			the "key" and "value" to that cell.  Notice
+			though that for now it skips the "key" <em>photos</em>.  The reason for this 
+			is that photos is a large object
+			that contains an array of objects and we don't want to print a huge wall of 
+			text will all the entries. Instead this same
+			function creates a range slider (new feature in HTML5), that allows the user 
+			to select a particular Sol day for the
+			Rover.  The range slide gets has values from the 0th Solday to the max_sol key
+			in the photo_manifest. When the Get Sol Day button is clicked, 
+			another function is called <code>getPics()</code></p>
+			
+			<p><code>getPics()</code> finds the index location that has a Sol day 
+			that is nearest to the Sol day the user	selected.  There were some days 
+			the rovers didn't take any pictures or there are no pictures in the database 
+			and so the index location in the array does not correspond directly to the 
+			sol day.  </p>
+			
+			<p>Once the nearest match is found another table is generated that displays 
+			to the user the actual Sol day found, the number of  pictures taken that day, and
+			the cameras used.</p>
+			
+			<p>There are also two clean up functions that we call to remove the tables, 
+			if we change our selection and requery the server.</p>
+
+			<hr></hr>
+		<h4>Putting it all together</h4>
+			<p>Now we can access our Manifest for a Rover and can get a bunch of 
+			data for it. But we actually want to get some of 
+			the relavant pictures for that Sol day that we chose.  Head on to the 
+			next page to see the implementation of that and
+			finally get a beautiful visual reward.</p>
+			
+		</div>
+		<div class="navbuttons">
+		<a class="navtext" href="seeit.html"><span class="navigation">Back</span></a>
+		<a class="navtext" href="mars2.html"><span class="navigation">Mars Pictures</span></a>
+		</div>
+		
+		<script src="menu.js"></script>
+	</body>
+</html>
